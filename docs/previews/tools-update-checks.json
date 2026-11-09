@@ -1,0 +1,45 @@
+{
+  "tools": [
+    {
+      "viewport": 320,
+      "logosLoaded": 9,
+      "noOverflow": true
+    },
+    {
+      "viewport": 390,
+      "logosLoaded": 9,
+      "noOverflow": true
+    },
+    {
+      "viewport": 600,
+      "logosLoaded": 9,
+      "noOverflow": true
+    },
+    {
+      "viewport": 768,
+      "logosLoaded": 9,
+      "noOverflow": true
+    },
+    {
+      "viewport": 800,
+      "logosLoaded": 9,
+      "noOverflow": true
+    },
+    {
+      "viewport": 900,
+      "logosLoaded": 9,
+      "noOverflow": true
+    },
+    {
+      "viewport": 1024,
+      "logosLoaded": 9,
+      "noOverflow": true
+    },
+    {
+      "viewport": 1440,
+      "logosLoaded": 9,
+      "noOverflow": true
+    }
+  ],
+  "spss": "assets/tools/spss-transparent.png"
+}
