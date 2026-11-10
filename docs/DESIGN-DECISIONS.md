@@ -1,51 +1,48 @@
 # Design decisions
 
-Anti Slop mode: **during**, explicitly selected by the user for this session.
+Anti Slop mode is **after**, explicitly selected by the owner for this session. Review proposed changes first and implement the items the owner approves.
 
-Reading this as: a personal statistics portfolio for recruiters, research collaborators, and people reviewing analytical work, using Reference A's dark spatial layout, Reference B's credential display, and the supplied dithered visual direction. **ENERGY 3 / RHYTHM 3 / MOTION 2**.
+The portfolio serves recruiters, research collaborators, and readers of Rayyan's analytical work. Its dark layout, readable typography, and real statistical figures establish the visual direction. **ENERGY 3 / RHYTHM 3 / MOTION 2**.
 
-## Direction and foundations
-
-The supplied `dithered/SKILL.md` and `dithered/DESIGN.md` establish a limited-palette dot treatment, Space Grotesk display type, Open Sans body type, IBM Plex Mono labels, explicit interaction states, and accessible contrast. The font choices are retained. Blue is retained as the single interface accent. The neutral foundation is adapted to the explicitly requested dark Reference A layout; the other semantic colors are not needed in this site.
+## Visual decisions
 
 | Decision | Reason |
 | --- | --- |
-| Near-black background, off-white text | Preserves Reference A's overall atmosphere and gives the supplied analytical charts a distinct foreground. |
-| Light blue `#8BB4FF` text/accent | A lighter derivative of the supplied `#3B82F6` supports contrast on dark surfaces. No blue-purple gradient is used. |
-| Space Grotesk headings | The broad geometric forms connect the dithered direction to the large role heading in Reference A. |
-| Open Sans body copy | Long project notes need readable, familiar letterforms at smaller sizes. |
-| IBM Plex Mono metadata | Aligns section indices, methods, and counts without turning the main copy into a terminal imitation. |
-| Fine grid only behind the opening | Refers to statistical coordinates and the chosen Reference A, then fades to avoid competing with project plots. |
-| Ordered dither dots | Dot sizes shade a mathematical surface and repeat inside the identity card, giving the requested dithered direction a specific motif. |
-| Text-only identity card | Replaces the reference portrait while honoring the user's instruction that no personal photo is needed. The card is a typographic composition, not a real credential. |
-| Brief initial card swing | References the suspended badge without an endless animation competing with reading. It settles within 2.8 seconds. |
-| Fixed dark theme | The user explicitly selected Reference A's dark layout. A second, unrequested theme would add a separate design scope. |
-| Floating rounded navigation | Carries over the requested reference and separates persistent navigation from page content. |
-| 4 / 2 / 9 summary counts | Counts the four supplied project images, two PDFs, and nine tools with owner-supplied logos. No invented experience or audience metrics. |
-| Two-column project cards | Four actual projects fit a readable 2×2 desktop arrangement; phone cards stack and charts remain visible. |
-| Contained original charts | Preserves axes, annotations, and original data colors instead of recoloring evidence into the interface palette. |
-| Project-note dialogs | Provide the question, approach, findings, and source without needing a server or additional routes. |
-| Centered credential focus | Adapts Reference B to two genuine certificates without duplicating cards to simulate a larger collection. |
-| Manual carousel | Keeps document reading stable and provides clear previous/next and pagination controls. |
-| Different corner treatments | The header is a pill, cards use 8–12px radii, supplied tool logos retain their original shapes, and directional carousel controls are circular. |
-| Supplied tool logos | Uses the nine supplied tool identities without cropping their shapes. SPSS uses a transparent-background variant documented in `ASSET-EDITS.md`. Tools without a supplied logo are omitted. |
-| Selective shadows | Only the floating header, suspended card, and modal need elevation; most content surfaces remain flat. |
-| External-link arrows | Mark links that leave the portfolio. Downward arrows mark in-page movement; project dialogs use a plus. |
-| Direct social contact | The user supplied three social profiles but no email endpoint. Real links provide contact without a nonfunctional form. |
-| No copied comments | The references' sample comments are not the user's content, so none are fabricated. |
-| About actions | Download CV and View project sit beneath the About heading in place of the repeated university label. The resume is local, and View project selects Projects before scrolling to the portfolio. |
-| Local fonts and assets | Keeps the delivered folder independent of font CDNs, runtime data APIs, and package installation. |
+| Near-black background and off-white text | Establish the owner's chosen dark appearance and separate analytical figures from the page. |
+| One blue interface accent | Identifies selected controls and important actions. |
+| Space Grotesk headings | Gives the specialization and name a clear typographic hierarchy. |
+| Open Sans body text | Supports extended project notes and publication descriptions. |
+| IBM Plex Mono for numerical labels | Makes dates, measurements, and counts easy to scan. |
+| Specialization in the hero, name above the biography | Introduces the work first and connects the biography to its author. |
+| Rupiah residual calendar | Grounds the opening in the study's 148 observations and nine flagged dates. |
+| Transparent full-width header | Keeps navigation available while showing a glimpse of the content beneath it. |
+| Large lead project and illustrated supporting rows | Accommodates different chart proportions and establishes a featured study. |
+| Publications as reading entries | Provides room for titles, authors, analysis contributions, and source links. |
+| Publication chart capped at its native 892px width | Avoids enlarging the supplied raster beyond its resolution. A caption explains the main observation at smaller sizes. |
+| Portrait book cover beside its description | Preserves the cover proportions and connects the image to its subject. |
+| Manual certificate carousel | Keeps one credential prominent while letting visitors control reading time. |
+| Tools grouped by use | Helps visitors scan programming, analysis, and office software. |
+| Cursor glow and small image lifts | Provide the owner's requested pointer feedback. Text links use crisp color and underline feedback. |
+| Local fonts, images, and CV | Keeps the static website self-contained. |
 
-## Component behavior
+## Interaction behavior
 
-- Main navigation follows visible sections; the menu collapses at widths below 800px.
-- Portfolio tabs support click, Left/Right, Home, and End with a roving keyboard tab stop.
-- Dialogs use native `dialog` and `showModal`, restore focus, close with Escape or Close, and accept a backdrop click outside their bounds.
-- Certificate previews use original rendered PDF pages. PDF links and downloads point to unchanged copies of the supplied PDFs.
-- On a narrow screen, only the selected certificate is shown; previous/next and pagination remain available.
-- Image loading has a reserved layout, loading feedback where applicable, and a text fallback on failure. Image failure does not remove source links.
-- No continuous movement runs. The decorative canvas draws once, and reduced motion removes entrance and transition animations.
+- The header hides while scrolling down and returns on a small upward scroll. Navigation scrolls smoothly to its section.
+- Portfolio tabs list Projects, Publications, Certificates, and Tools. They support arrow keys, Home, and End. Newly selected content fades in over 180ms.
+- Project notes open in native dialogs with a 220ms fade and scale. Close, Escape, and backdrop clicks trigger a 180ms exit, followed by the existing focus restoration.
+- Each publication entry is one accessible link covering its image, copy, and padding. It opens the original publication in a new tab.
+- The book entry stacks vertically below 700px. The chart shrinks proportionally with its container.
+- Certificate previews link to the bundled original PDFs. The CV download uses the bundled resume.
+- Contact rows link to email, LinkedIn, GitHub, and Instagram.
+- Hover effects are limited to fine pointers. Reduced-motion preferences disable decorative animations and smooth scrolling.
+- The cursor glow updates on pointer movement and hides when the pointer leaves or the window loses focus.
 
-## Content tone
+## Content and maintenance
 
-Keep personal copy direct and first-person. Describe methods and questions rather than claiming expertise levels, employment history, or impact metrics. Project findings cite repository READMEs and keep the limitations of their analyses attached.
+Project descriptions explain questions, methods, findings, and limitations using repository evidence. Publication metadata comes from the supplied sources. Rayyan confirmed that he performed all analysis for the article. His book contribution covers only part of the analysis; its exact scope has not been specified. The book description is based on the supplied description image. The hero uses the owner's chosen title, Data Scientist & Data Analyst.
+
+Keep copy concrete and first-person where it describes Rayyan's work. Use original analytical images and supplied tool logos. Maintain the owner's English-only presentation and photo-free layout.
+
+Edit the website folder directly. The owner requested removal of the ZIP archive and asks that future updates do not create or refresh one.
+
+Project links use `#project-currency`, `#project-timeseries`, `#project-hantavirus`, and `#project-library`. Direct entry opens the corresponding dialog. Opening a project adds a browser history entry, and Back or Forward synchronizes the dialog with the address. Closing a directly loaded project returns to `#projects` within the site. Portfolio tabs use `#projects`, `#publications`, `#certificates`, and `#tools` for shareable selection.

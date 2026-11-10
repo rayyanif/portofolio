@@ -1,8 +1,38 @@
 "use strict";
 
+const cursorGlow = document.querySelector(".cursor-glow");
+const cursorEffects = matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+let cursorFrame = 0;
+let cursorX = 0;
+let cursorY = 0;
+
+function hideCursorGlow() {
+  cancelAnimationFrame(cursorFrame);
+  cursorFrame = 0;
+  cursorGlow.classList.remove("is-visible");
+}
+document.addEventListener("pointermove", event => {
+  if (!cursorEffects.matches || event.pointerType !== "mouse") return;
+  cursorX = event.clientX;
+  cursorY = event.clientY;
+  if (cursorFrame) return;
+  cursorFrame = requestAnimationFrame(() => {
+    cursorGlow.style.transform = `translate3d(${cursorX - 300}px, ${cursorY - 300}px, 0)`;
+    cursorGlow.classList.add("is-visible");
+    cursorFrame = 0;
+  });
+}, { passive: true });
+document.documentElement.addEventListener("pointerleave", hideCursorGlow);
+window.addEventListener("blur", hideCursorGlow);
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) hideCursorGlow();
+});
+cursorEffects.addEventListener("change", hideCursorGlow);
+
 const projects = {
   currency: {
     title: "Currency clustering against the SDR",
+    titleAccent: "Currency clustering",
     image: "assets/projects/currency-clustering.png",
     alt: "K-means scatterplot of five-year and one-month exchange-rate Z-scores for 155 currencies.",
     size: [2160, 2016],
@@ -15,6 +45,7 @@ const projects = {
   },
   timeseries: {
     title: "Forecasting the rupiah",
+    titleAccent: "Forecasting",
     image: "assets/projects/time-series-anomaly-detection.png",
     alt: "Individuals control chart of ARIMA residuals, highlighting observations outside the two-standard-deviation limits.",
     size: [963, 405],
@@ -27,6 +58,7 @@ const projects = {
   },
   hantavirus: {
     title: "Hantavirus outcome modeling",
+    titleAccent: "outcome modeling",
     image: "assets/projects/hantavirus-outcome-logit.png",
     alt: "Holdout confusion matrices comparing the default 0.50 cutoff with the training-derived Youden cutoff.",
     size: [1980, 1320],
@@ -39,13 +71,15 @@ const projects = {
   },
   library: {
     title: "Library management system",
+    titleAccent: "Library management",
     image: "assets/projects/sistem-perpustakaan-demo.png",
     alt: "Book-management screen with a library catalogue and navigation for loans, fines, and members.",
     size: [1917, 1077],
-    summary: "A PHP and MySQL/MariaDB library application connecting a public book catalogue with staff workflows.",
+    summary: "I designed the MySQL/MariaDB database behind a PHP library application, from shelf locations in the catalogue to loans, returns, and fines.",
     tools: ["PHP", "SQL", "MySQL / MariaDB", "Database design"],
     question: "How can book records, members, and lending transactions be organized into a usable library workflow?",
-    method: "The PHP application connects books and members with loans, returns, and fines in MySQL or MariaDB. The repository includes the SQL schema and setup steps.",
+    methodHeading: "Database design",
+    method: "I split the schema into five tables: books, shelves, members, staff, and loans. Each book stores a shelf ID, so shelf locations can be recorded separately from catalogue details. The loan table references the book, member, and staff IDs. It also stores the loan date, due date, actual return date, fine amount, and payment status, so staff can track each loan from checkout through return and payment.",
     findings: ["The public demo lets a visitor search four fictional books and filter by availability.", "The screenshot shows the staff interface in the full application. Recording loans and returns requires running PHP with the database configured."],
     repo: "https://github.com/rayyanif/sistem-perpustakaan-demo",
     demo: "https://rayyanif.github.io/sistem-perpustakaan-demo/"
@@ -60,6 +94,35 @@ const certificateData = {
 const navLinks = [...document.querySelectorAll(".nav-links a")];
 const menuButton = document.querySelector(".menu-toggle");
 const navigation = document.querySelector(".nav-links");
+const header = document.querySelector(".site-header");
+let previousScroll = Math.max(0, scrollY);
+let scrollTravel = 0;
+
+function updateHeader() {
+  const maximumScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+  const position = Math.min(maximumScroll, Math.max(0, scrollY));
+  const delta = position - previousScroll;
+  previousScroll = position;
+  if (position <= header.offsetHeight || menuButton.getAttribute("aria-expanded") === "true" ||
+      header.querySelector(":focus-visible") || document.querySelector("dialog[open]")) {
+    header.classList.remove("is-hidden");
+    scrollTravel = 0;
+    return;
+  }
+  if (Math.sign(delta) !== Math.sign(scrollTravel)) scrollTravel = 0;
+  scrollTravel += delta;
+  if (scrollTravel >= 24) {
+    header.classList.add("is-hidden");
+    scrollTravel = 0;
+  } else if (scrollTravel <= -8) {
+    header.classList.remove("is-hidden");
+    scrollTravel = 0;
+  }
+}
+header.addEventListener("focusin", () => {
+  header.classList.remove("is-hidden");
+  scrollTravel = 0;
+});
 function closeMenu() {
   navigation.classList.remove("is-open");
   menuButton.setAttribute("aria-expanded", "false");
@@ -68,6 +131,7 @@ menuButton.addEventListener("click", () => {
   const open = menuButton.getAttribute("aria-expanded") !== "true";
   menuButton.setAttribute("aria-expanded", String(open));
   navigation.classList.toggle("is-open", open);
+  header.classList.remove("is-hidden");
 });
 navLinks.forEach(link => link.addEventListener("click", closeMenu));
 document.addEventListener("keydown", event => {
@@ -101,19 +165,26 @@ function updateNavigation() {
 addEventListener("scroll", () => {
   if (!scrollQueued) {
     scrollQueued = true;
-    requestAnimationFrame(updateNavigation);
+    requestAnimationFrame(() => {
+      updateHeader();
+      updateNavigation();
+    });
   }
 }, { passive: true });
 updateNavigation();
 
 const tabs = [...document.querySelectorAll('[role="tab"]')];
-function activateTab(tab) {
+function activateTab(tab, updateAddress = true) {
   tabs.forEach(item => {
     const selected = item === tab;
     item.setAttribute("aria-selected", String(selected));
     item.tabIndex = selected ? 0 : -1;
     document.getElementById(item.getAttribute("aria-controls")).hidden = !selected;
   });
+  if (updateAddress) {
+    const hash = `#${tab.id.replace("tab-", "")}`;
+    if (location.hash !== hash) history.pushState(null, "", hash);
+  }
   updateNavigation();
 }
 tabs.forEach((tab, index) => {
@@ -132,7 +203,7 @@ tabs.forEach((tab, index) => {
 });
 
 document.querySelectorAll("[data-view-projects]").forEach(link => {
-  link.addEventListener("click", () => activateTab(document.getElementById("tab-projects")));
+  link.addEventListener("click", () => activateTab(document.getElementById("tab-projects"), false));
 });
 
 function element(tag, className, text) {
@@ -147,7 +218,32 @@ function showDialog(dialog, trigger) {
   dialog.showModal();
   dialog.scrollTop = 0;
 }
+async function closeDialog(dialog) {
+  if (!dialog.open || dialog.classList.contains("is-closing")) return;
+  if (dialog.classList.contains("detail-dialog") && matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    dialog.classList.add("is-closing");
+    await Promise.allSettled(dialog.getAnimations().map(animation => animation.finished));
+    if (!dialog.classList.contains("is-closing")) return;
+  }
+  dialog.close();
+  dialog.classList.remove("is-closing");
+}
+function requestDialogClose(dialog) {
+  if (dialog.id === "project-dialog" && location.hash.startsWith("#project-")) {
+    if (history.state?.portfolioProject) history.back();
+    else {
+      history.replaceState(null, "", "#projects");
+      syncPortfolioAddress();
+    }
+    return;
+  }
+  closeDialog(dialog);
+}
 document.querySelectorAll("dialog").forEach(dialog => {
+  dialog.addEventListener("cancel", event => {
+    event.preventDefault();
+    requestDialogClose(dialog);
+  });
   dialog.addEventListener("close", () => {
     if (document.activeElement === document.body && dialogTrigger?.isConnected) {
       dialogTrigger.focus({ preventScroll: true });
@@ -156,11 +252,11 @@ document.querySelectorAll("dialog").forEach(dialog => {
   dialog.addEventListener("click", event => {
     if (event.target !== dialog) return;
     const rect = dialog.getBoundingClientRect();
-    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) requestDialogClose(dialog);
   });
 });
 document.querySelectorAll("[data-close-dialog]").forEach(button => {
-  button.addEventListener("click", () => document.getElementById(button.dataset.closeDialog).close());
+  button.addEventListener("click", () => requestDialogClose(document.getElementById(button.dataset.closeDialog)));
 });
 
 function requestsAlternateNavigation(event) {
@@ -169,15 +265,27 @@ function requestsAlternateNavigation(event) {
 
 document.querySelectorAll("[data-project]").forEach(link => {
   link.setAttribute("aria-haspopup", "dialog");
+  link.href = `#project-${link.dataset.project}`;
   link.addEventListener("click", event => {
     const project = projects[link.dataset.project];
     if (!project || requestsAlternateNavigation(event)) return;
     event.preventDefault();
+    history.pushState({ portfolioProject: true }, "", link.hash);
+    openProject(link.dataset.project, link);
+  });
+});
+
+function openProject(key, trigger) {
+    const project = projects[key];
+    const dialog = document.getElementById("project-dialog");
+    dialog.classList.remove("is-closing");
     const content = document.getElementById("project-dialog-content");
     content.replaceChildren();
     const grid = element("div", "dialog-project-grid");
     const copy = element("div", "dialog-project-copy");
-    const title = element("h2", "", project.title);
+    const title = element("h2");
+    const [before, after] = project.title.split(project.titleAccent);
+    title.append(before, element("span", "title-accent", project.titleAccent), after);
     title.id = "project-dialog-title";
     copy.append(title, element("p", "", project.summary));
     const tags = element("div", "dialog-tags");
@@ -192,7 +300,7 @@ document.querySelectorAll("[data-project]").forEach(link => {
     watchImage(image);
     grid.append(copy, imageBox);
     content.append(grid);
-    for (const [heading, text] of [["The question", project.question], ["The approach", project.method]]) {
+    for (const [heading, text] of [["The question", project.question], [project.methodHeading ?? "The approach", project.method]]) {
       const note = element("section", "project-note");
       note.append(element("h3", "", heading), element("p", "", text));
       content.append(note);
@@ -217,9 +325,34 @@ document.querySelectorAll("[data-project]").forEach(link => {
       actions.append(demo);
     }
     content.append(actions);
-    showDialog(document.getElementById("project-dialog"), link);
-  });
-});
+    if (dialog.open) {
+      dialogTrigger = trigger;
+      dialog.scrollTop = 0;
+    } else showDialog(dialog, trigger);
+    dialog.dataset.project = key;
+}
+
+function syncPortfolioAddress() {
+  const route = location.hash.slice(1);
+  const dialog = document.getElementById("project-dialog");
+  const key = route.replace(/^project-/, "");
+  if (route.startsWith("project-") && Object.hasOwn(projects, key)) {
+    activateTab(document.getElementById("tab-projects"), false);
+    if (!dialog.open || dialog.dataset.project !== key || dialog.classList.contains("is-closing")) {
+      openProject(key, document.querySelector(`[data-project="${key}"]`));
+    }
+    return;
+  }
+  const wasProjectOpen = dialog.open;
+  closeDialog(dialog);
+  const tab = tabs.find(item => item.id === `tab-${route}`);
+  if (tab) {
+    activateTab(tab, false);
+    if (!wasProjectOpen) document.getElementById("portfolio").scrollIntoView();
+  }
+}
+addEventListener("hashchange", syncPortfolioAddress);
+addEventListener("load", syncPortfolioAddress);
 
 let selectedCertificate = 0;
 const certificateCards = [...document.querySelectorAll("[data-cert-card]")];

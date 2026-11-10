@@ -1,5 +1,27 @@
 # Portfolio checks
 
+## Reference header styling
+
+Applied the local reference's dark translucent surface, 12px background blur, full-width border, 20px wordmark and 32px navigation spacing. The existing local font fits the portfolio typography. The owner subsequently requested more transparency, so surface opacity is now 82%.
+
+- PASS, styling purpose. Blur belongs only to the header and separates navigation from scrolling content.
+- PASS, behavior. A 360px downward scroll hid the header, and a 14.4px upward scroll revealed it.
+- PASS, mobile. At 390px, Menu exposed Home, About, Portfolio and Contact without horizontal overflow, and Escape closed it.
+- PASS, runtime. Browser checks recorded no warnings or errors. The scroll script's SHA-256 is unchanged from before this styling revision.
+
+Preview saved in `previews/header.jpg`.
+
+## Header revision, 9 November 2026
+
+The header now uses the page background, content width and a thin bottom divider. It slides away after 24 pixels of downward travel past the opening edge, and returns after 8 pixels upward. The transition takes 180 milliseconds. Keyboard focus and the open mobile menu keep navigation visible. Reduced-motion preferences disable the transition.
+
+- PASS, appearance and purpose (R-11, R-19, R-20, R-31). Browser preview confirms a flat header aligned with the content. Motion makes room for reading and restores navigation on upward scrolling.
+- PASS, scroll behavior (R-26, R-35). Desktop downward scroll to 432px put the header fully above the viewport. A 14.4px upward scroll restored it. Both directions also changed visibility at 390px width.
+- PASS, mobile and keyboard access (R-03, R-32, R-39). Mobile Menu opened, stayed visible during downward scrolling and closed with Escape. The page had no horizontal overflow. Focus reveals navigation and the existing reduced-motion rule removes animation.
+- PASS, runtime. JavaScript syntax check passed and the browser recorded no warnings or errors during these checks.
+
+The current header preview is in `previews/header.jpg`. Earlier entries below describe checks performed before this header revision.
+
 Checked on 9 November 2026. Anti Slop was applied during design and implementation, using the user's explicit reference choices and dithered files. The scope is the complete local static website, not a deployment.
 
 ## Results
@@ -151,6 +173,14 @@ The following reports the applied gate for this site, with concrete evidence and
 - **Craft PASS:** Native local interactions work, supplied evidence is preserved, and no account flow or unimplemented form is included.
 
 ## Verification limits
+
+### Cursor interaction update — 2026-11-10
+
+- PASS: Added the requested reference-style blue cursor glow and small hover lifts to controls, project previews, certificates, and tool logos. Header hide/show behavior is preserved.
+- PASS: In the earlier local browser check, mouse movement made the glow visible, a hovered link moved up 2px, and the glow retained `pointer-events: none`. Project notes opened and closed; browser warning/error logs were empty.
+- PASS: JavaScript syntax and local asset/anchor checks passed again after smoothing the header link transform transition.
+- PASS (source review): Touch/coarse pointers and reduced-motion preferences disable the decorative effects. No perpetual animation loop was added.
+- Scope: The earlier browser session was no longer available on continuation; the last header transition adjustment was checked in source. This update is not a new full accessibility audit. No ZIP was created.
 
 - Direct `file://` navigation is blocked by the preview browser's URL policy, so browser execution was verified over local HTTP. The website uses relative local assets and no runtime fetch, and can be opened by the user in a normal browser using `index.html`.
 - OS-level reduced-motion settings and full screen-reader output were not changed or audited; their source-level support is documented.

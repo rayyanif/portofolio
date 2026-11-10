@@ -12,6 +12,14 @@
   <script src="script.js" defer></script>
 </head>
 <body>
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <filter id="colab-background" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 -1 0 1"/>
+      </filter>
+    </defs>
+  </svg>
+  <div class="cursor-glow" aria-hidden="true"></div>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <nav class="navigation" aria-label="Main navigation">
@@ -30,9 +38,9 @@
   <main id="main" tabindex="-1">
     <section class="hero section-shell" id="home" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <h1 id="hero-title">Rayyan Ilyas <span>Fadani</span></h1>
+        <h1 id="hero-title">Data Scientist<span>&amp; Data Analyst</span></h1>
         <p class="hero-description">I work with exchange rates and health data in R. I’ve compared the rupiah with 154 other currencies and tested a model of recovery from hantavirus.</p>
-        <a class="button button-primary" href="#portfolio" data-view-projects>View all four projects</a>
+        <a class="button button-primary" href="#portfolio" data-view-projects>View selected projects</a>
       </div>
       <figure class="residual-figure" aria-labelledby="figure-title">
         <figcaption>
@@ -60,7 +68,7 @@
 
     <section class="about section-shell" id="about" aria-labelledby="about-title">
       <div class="about-heading">
-        <h2 id="about-title">About me</h2>
+        <h2 id="about-title">Rayyan Ilyas Fadani</h2>
         <div class="about-actions">
           <a class="button button-outline" href="assets/documents/rayyan-ilyas-fadani-cv.pdf" download="Rayyan-Ilyas-Fadani-CV.pdf">Download CV</a>
           <a class="text-link" href="#portfolio" data-view-projects>View project</a>
@@ -77,8 +85,9 @@
         <h2 id="portfolio-title">Portfolio</h2>
         <div class="portfolio-tabs" role="tablist" aria-label="Portfolio sections">
           <button id="tab-projects" type="button" role="tab" aria-selected="true" aria-controls="panel-projects" tabindex="0">Projects <span>4</span></button>
+          <button id="tab-publications" type="button" role="tab" aria-selected="false" aria-controls="panel-publications" tabindex="-1">Publications <span>2</span></button>
           <button id="tab-certificates" type="button" role="tab" aria-selected="false" aria-controls="panel-certificates" tabindex="-1">Certificates <span>2</span></button>
-          <button id="tab-tools" type="button" role="tab" aria-selected="false" aria-controls="panel-tools" tabindex="-1">Tools <span>9</span></button>
+          <button id="tab-tools" type="button" role="tab" aria-selected="false" aria-controls="panel-tools" tabindex="-1">Tools <span>13</span></button>
         </div>
       </div>
 
@@ -87,7 +96,7 @@
           <a class="project-entry" href="https://github.com/rayyanif/currency-clustering#readme" data-project="currency" aria-labelledby="currency-action currency-title">
             <div class="project-image"><img src="assets/projects/currency-clustering.png" width="2160" height="2016" loading="lazy" alt="Scatterplot of 155 currencies. The two clusters separate most clearly along the five-year Z-score axis."></div>
             <div class="project-body">
-              <h3 id="currency-title">Where does the rupiah sit among 155 currencies?</h3>
+              <h3 id="currency-title">Where does the <span class="title-accent">rupiah</span> sit among 155 currencies?</h3>
               <p>I grouped currencies by the cost of one Special Drawing Right relative to each currency’s own history. It took more rupiah than usual to buy one, whether I looked back five years or one month.</p>
               <dl class="scores">
                 <div><dt>Five-year Z-score</dt><dd>+2.52</dd></div>
@@ -101,26 +110,58 @@
           <article>
             <a class="project-entry" href="https://github.com/rayyanif/time-series-anomaly-detection#readme" data-project="timeseries" aria-labelledby="rate-action rate-title">
               <div class="project-image"><img src="assets/projects/time-series-anomaly-detection.png" width="963" height="405" loading="lazy" alt="Rupiah model residuals plotted against upper and lower control limits."></div>
-              <div class="project-body"><h3 id="rate-title">Forecasting the rupiah</h3><p>I compared ten ARIMA fits using 148 daily exchange rates. The residual chart shows where the best-fitting model missed high or low.</p></div>
+              <div class="project-body"><h3 id="rate-title"><span class="title-accent">Forecasting</span> the rupiah</h3><p>I compared ten ARIMA fits using 148 daily exchange rates. The residual chart shows where the best-fitting model missed high or low.</p></div>
               <span class="project-action" id="rate-action">Inspect the model errors</span>
             </a>
           </article>
           <article>
             <a class="project-entry" href="https://github.com/rayyanif/hantavirus-outcome-logit#readme" data-project="hantavirus" aria-labelledby="cutoff-action cutoff-title">
               <div class="project-image"><img src="assets/projects/hantavirus-outcome-logit.png" width="1980" height="1320" loading="lazy" alt="Two confusion matrices compare deaths detected and false alerts at different cutoffs."></div>
-              <div class="project-body"><h3 id="cutoff-title">Hantavirus outcomes</h3><p>Changing the cutoff flagged 169 of 213 deaths in the held-out data, up from 91. False alerts rose from 69 to 349.</p></div>
+              <div class="project-body"><h3 id="cutoff-title">Hantavirus <span class="title-accent">outcomes</span></h3><p>Changing the cutoff flagged 169 of 213 deaths in the held-out data, up from 91. False alerts rose from 69 to 349.</p></div>
               <span class="project-action" id="cutoff-action">Compare the cutoffs</span>
             </a>
           </article>
           <article>
             <a class="project-entry" href="https://github.com/rayyanif/sistem-perpustakaan-demo#readme" data-project="library" aria-labelledby="library-action library-title">
               <div class="project-image"><img src="assets/projects/sistem-perpustakaan-demo.png" width="1917" height="1077" loading="lazy" alt="Book records in the staff interface of the PHP library application."></div>
-              <div class="project-body"><h3 id="library-title">Library catalogue and loans</h3><p>The public demo lets you search four sample books and check availability. The full PHP application also records loans, returns, and fines.</p></div>
-              <span class="project-action" id="library-action">See the catalogue demo and code</span>
+              <div class="project-body"><h3 id="library-title">Library <span class="title-accent">catalogue and loans</span></h3><p>I designed a five-table database that links books to shelves and ties each loan to a book, a member, and the staff member who recorded it.</p></div>
+              <span class="project-action" id="library-action">See the database design and demo</span>
             </a>
           </article>
         </div>
         <a class="text-link repositories" href="https://github.com/rayyanif?tab=repositories" target="_blank" rel="noopener noreferrer">All repositories on GitHub</a>
+      </div>
+
+      <div id="panel-publications" class="tab-panel" role="tabpanel" aria-labelledby="tab-publications" tabindex="0" hidden>
+        <div class="publication-list">
+          <article>
+            <a class="publication-entry" href="https://biastatistics.statistics.unpad.ac.id/?journal=biastatistics-special-issue&amp;page=article&amp;op=view&amp;path[]=365" target="_blank" rel="noopener noreferrer" aria-labelledby="publication-article-title">
+            <p class="publication-meta">Journal article · 10 August 2026</p>
+            <h3 id="publication-article-title" lang="id">Analisis Performa Rupiah Terhadap Mata Uang Global Menggunakan <span class="title-accent">X Control Chart</span></h3>
+            <figure class="publication-figure">
+              <img class="publication-chart" src="assets/publications/rupiah-control-chart.png" width="892" height="270" loading="lazy" alt="Rupiah exchange-rate control chart showing the IDR series rising above the upper control limit in April 2026.">
+              <figcaption>The rupiah series crosses the upper control limit in April 2026.</figcaption>
+            </figure>
+            <p>Yuyun Hidayat, Rayyan Ilyas Fadani, Gregorius Adiyatma Pradana, Febrianggi Caesar Immanuel, and Muhamad Fadhli Alfarizi.</p>
+            <p>A study of monthly exchange rates across 155 currencies from April 2021 to April 2026, using control charts and standardized comparisons to examine the rupiah’s performance.</p>
+            <p><strong>My contribution</strong> · I carried out all of the analysis for this study.</p>
+            <p class="publication-meta">BIAStatistics Special Issue · Vol. 6, No. 2 · pp. 63–70</p>
+            <span class="text-link">Read the journal article</span>
+            </a>
+          </article>
+          <article>
+            <a class="publication-entry publication-book" href="https://play.google.com/store/books/details?id=x0sCEgAAQBAJ" target="_blank" rel="noopener noreferrer" aria-labelledby="publication-book-title">
+            <img class="publication-cover" src="assets/publications/statistical-quality-control.png" width="488" height="690" loading="lazy" alt="Statistical Quality Control book cover, with a gold financial chart and white title lettering.">
+            <div>
+            <p class="publication-meta">Book</p>
+            <h3 id="publication-book-title">Statistical <span class="title-accent">Quality Control</span></h3>
+            <p>An introduction to statistical process control, from common-cause and assignable-cause variation to control limits and multivariate quality control. Worked calculations explain each formula step by step, with interpretations that connect the results to practical situations.</p>
+            <p>Includes five applied case studies across different fields, written for students in industrial engineering, statistics, and operations management, as well as quality engineers and industry practitioners studying independently.</p>
+            <span class="text-link">View the book on Google Play</span>
+            </div>
+            </a>
+          </article>
+        </div>
       </div>
 
       <div id="panel-certificates" class="tab-panel" role="tabpanel" aria-labelledby="tab-certificates" tabindex="0" hidden>
@@ -145,10 +186,20 @@
           </div>
           <div class="carousel-controls"><button class="icon-button" type="button" id="cert-prev" aria-label="Previous certificate"><span aria-hidden="true">←</span></button><div class="carousel-pagination"><button type="button" class="pagination-dot is-active" data-cert-select="0" aria-label="Show Data Analysis certificate" aria-current="true"></button><button type="button" class="pagination-dot" data-cert-select="1" aria-label="Show Data Science certificate"></button></div><span class="carousel-status" id="certificate-status" aria-live="polite">1 of 2</span><button class="icon-button" type="button" id="cert-next" aria-label="Next certificate"><span aria-hidden="true">→</span></button></div>
         </div>
+        <a class="text-link more-certificates" href="https://drive.google.com/drive/folders/1c-R0uegCNLDr7WXMf4hUiOt3ECHUJkLB" target="_blank" rel="noopener noreferrer">View my other certification</a>
       </div>
 
       <div id="panel-tools" class="tab-panel" role="tabpanel" aria-labelledby="tab-tools" tabindex="0" hidden>
         <div class="tool-groups">
+          <section class="tool-group">
+            <h3>IDEs &amp; notebooks</h3>
+            <ul>
+              <li><img class="tool-logo" src="assets/tools/jupyter.webp" width="64" height="64" loading="lazy" alt=""><span>Jupyter</span></li>
+              <li><img class="tool-logo" src="assets/tools/rstudio.png" width="64" height="64" loading="lazy" alt=""><span>RStudio</span></li>
+              <li><img class="tool-logo" src="assets/tools/vscode.png" width="64" height="64" loading="lazy" alt=""><span>Visual Studio Code</span></li>
+              <li><img class="tool-logo" src="assets/tools/colab.png" width="64" height="64" loading="lazy" alt=""><span>Google Colab</span></li>
+            </ul>
+          </section>
           <section class="tool-group">
             <h3>Programming &amp; queries</h3>
             <ul>
@@ -178,11 +229,24 @@
     </section>
 
     <section class="contact section-shell" id="contact" aria-labelledby="contact-title">
-      <div><h2 id="contact-title">Contact</h2><p>For questions about a project, message me on LinkedIn.</p></div>
+      <div><h2 id="contact-title">Contact</h2><p>For questions about a project, email me or message me on LinkedIn.</p></div>
       <div class="social-links">
-        <a href="https://www.linkedin.com/in/rayyanif" target="_blank" rel="noopener noreferrer"><strong>LinkedIn</strong><span>/in/rayyanif</span></a>
-        <a href="https://github.com/rayyanif" target="_blank" rel="noopener noreferrer"><strong>GitHub</strong><span>@rayyanif</span></a>
-        <a href="https://www.instagram.com/rayyanifelse/" target="_blank" rel="noopener noreferrer"><strong>Instagram</strong><span>@rayyanifelse</span></a>
+        <a href="https://www.linkedin.com/in/rayyanif" target="_blank" rel="noopener noreferrer">
+          <svg class="contact-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 2H3.55C2.69 2 2 2.68 2 3.52v16.96C2 21.32 2.69 22 3.55 22h16.9c.86 0 1.55-.68 1.55-1.52V3.52C22 2.68 21.31 2 20.45 2ZM7.93 18.75H4.98V9.2h2.95ZM6.45 7.9a1.71 1.71 0 1 1 0-3.42 1.71 1.71 0 0 1 0 3.42Zm12.3 10.85H15.8V14.1c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.73H9.51V9.2h2.83v1.3h.04c.39-.74 1.36-1.52 2.79-1.52 2.98 0 3.58 1.96 3.58 4.51Z"/></svg>
+          <strong>LinkedIn</strong><span>/in/rayyanif</span>
+        </a>
+        <a href="https://github.com/rayyanif" target="_blank" rel="noopener noreferrer">
+          <svg class="contact-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .8a11.3 11.3 0 0 0-3.6 22c.6.1.8-.3.8-.6v-2.1c-3.4.7-4.1-1.4-4.1-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.4-5.5-6 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.4 1.2a11.7 11.7 0 0 1 6.2 0c2.4-1.6 3.4-1.2 3.4-1.2.6 1.7.2 2.9.1 3.2.8.9 1.2 2 1.2 3.3 0 4.6-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.3 11.3 0 0 0 12 .8Z"/></svg>
+          <strong>GitHub</strong><span>@rayyanif</span>
+        </a>
+        <a href="https://www.instagram.com/rayyanifelse/" target="_blank" rel="noopener noreferrer">
+          <svg class="contact-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          <strong>Instagram</strong><span>@rayyanifelse</span>
+        </a>
+        <a href="mailto:rayyan.if10@gmail.com">
+          <svg class="contact-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
+          <strong>Email</strong><span>rayyan.if10@gmail.com</span>
+        </a>
       </div>
     </section>
   </main>
