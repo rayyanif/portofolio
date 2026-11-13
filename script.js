@@ -30,6 +30,19 @@ document.addEventListener("visibilitychange", () => {
 cursorEffects.addEventListener("change", hideCursorGlow);
 
 const projects = {
+  covid: {
+    title: "COVID-19 lung CT classification",
+    titleAccent: "CT classification",
+    image: "assets/projects/covid-ct-prediction.png",
+    alt: "Example CT image predicted as COVID. The displayed probability is a model output, not clinical certainty.",
+    size: [389, 411],
+    summary: "I trained and fine-tuned an EfficientNetV2B0 model to classify individual lung CT images as COVID-19 or non-COVID-19.",
+    tools: ["Python", "TensorFlow / Keras", "EfficientNetV2B0", "Transfer learning"],
+    question: "How well can an ImageNet-pretrained model distinguish COVID-19 from non-COVID-19 lung CT images in this dataset?",
+    method: "I used 8,439 images with a fixed stratified split: 5,907 training, 1,266 validation, and 1,266 test images. I converted grayscale images to three channels and resized them to 224 × 224. After training a new classifier with the backbone frozen, I fine-tuned the backbone with class weights and selected the weights with the highest validation macro-F1.",
+    findings: ["Test accuracy was 99.68% and macro-F1 was 99.22%. COVID-19 precision was 100.00% and recall was 99.64%.", "The model correctly classified 142 non-COVID images and 1,120 COVID images. Four COVID images were classified as non-COVID.", "The split is per image, not per patient. Related slices may appear in different splits, so the scores may be optimistic. Performance on new patients or other hospitals has not been established. This project is not intended for clinical diagnosis."],
+    repo: "https://github.com/rayyanif/COVID-CT-Scans-Classification"
+  },
   currency: {
     title: "Currency clustering against the SDR",
     titleAccent: "Currency clustering",
@@ -143,7 +156,7 @@ document.addEventListener("keydown", event => {
 document.addEventListener("click", event => {
   if (!event.target.closest(".navigation")) closeMenu();
 });
-matchMedia("(min-width: 800px)").addEventListener("change", closeMenu);
+matchMedia("(min-width: 1050px)").addEventListener("change", closeMenu);
 
 const sections = [...document.querySelectorAll("main > section[id]")];
 let scrollQueued = false;
@@ -172,39 +185,6 @@ addEventListener("scroll", () => {
   }
 }, { passive: true });
 updateNavigation();
-
-const tabs = [...document.querySelectorAll('[role="tab"]')];
-function activateTab(tab, updateAddress = true) {
-  tabs.forEach(item => {
-    const selected = item === tab;
-    item.setAttribute("aria-selected", String(selected));
-    item.tabIndex = selected ? 0 : -1;
-    document.getElementById(item.getAttribute("aria-controls")).hidden = !selected;
-  });
-  if (updateAddress) {
-    const hash = `#${tab.id.replace("tab-", "")}`;
-    if (location.hash !== hash) history.pushState(null, "", hash);
-  }
-  updateNavigation();
-}
-tabs.forEach((tab, index) => {
-  tab.addEventListener("click", () => activateTab(tab));
-  tab.addEventListener("keydown", event => {
-    let next;
-    if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
-    if (event.key === "ArrowLeft") next = (index + tabs.length - 1) % tabs.length;
-    if (event.key === "Home") next = 0;
-    if (event.key === "End") next = tabs.length - 1;
-    if (next === undefined) return;
-    event.preventDefault();
-    activateTab(tabs[next]);
-    tabs[next].focus();
-  });
-});
-
-document.querySelectorAll("[data-view-projects]").forEach(link => {
-  link.addEventListener("click", () => activateTab(document.getElementById("tab-projects"), false));
-});
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -337,18 +317,15 @@ function syncPortfolioAddress() {
   const dialog = document.getElementById("project-dialog");
   const key = route.replace(/^project-/, "");
   if (route.startsWith("project-") && Object.hasOwn(projects, key)) {
-    activateTab(document.getElementById("tab-projects"), false);
     if (!dialog.open || dialog.dataset.project !== key || dialog.classList.contains("is-closing")) {
       openProject(key, document.querySelector(`[data-project="${key}"]`));
     }
     return;
   }
-  const wasProjectOpen = dialog.open;
   closeDialog(dialog);
-  const tab = tabs.find(item => item.id === `tab-${route}`);
-  if (tab) {
-    activateTab(tab, false);
-    if (!wasProjectOpen) document.getElementById("portfolio").scrollIntoView();
+  if (route === "portfolio") {
+    history.replaceState(null, "", "#projects");
+    document.getElementById("projects").scrollIntoView();
   }
 }
 addEventListener("hashchange", syncPortfolioAddress);
